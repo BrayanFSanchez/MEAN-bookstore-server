@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const morgan = require("morgan");
+const errorHandler = require("./middleware/error");
 const connectDatabase = require("./config/db");
 
 dotenv.config({ path: "./config/config.env" });
@@ -16,6 +17,8 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 app.use("/api/Book", book);
 app.use("/api/BookstoreAuthor", author);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

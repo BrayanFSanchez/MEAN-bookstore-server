@@ -1,4 +1,3 @@
-const Router = require("express");
 const express = require("express");
 const api = express.Router();
 
@@ -8,7 +7,7 @@ const {
   getAuthorById,
   updateAuthor,
   deleteAuthor,
-} = require("../controllers/author.js");
+} = require("../controllers/author");
 
 api.route("/").post(createAuthor).get(getAuthors);
 api.route("/:id").get(getAuthorById).put(updateAuthor).delete(deleteAuthor);

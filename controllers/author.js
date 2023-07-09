@@ -1,3 +1,4 @@
+const ErrorResponse = require("../helper/errorResponse");
 const Author = require("../models/Author");
 
 exports.createAuthor = async (req, res, next) => {
@@ -11,10 +12,7 @@ exports.createAuthor = async (req, res, next) => {
       message: "Autor creado",
     });
   } catch (error) {
-    res.status(400).json({
-      error: true,
-      message: "Error al crear el autor",
-    });
+    next(new ErrorResponse("Error: al crear el autor", 404));
   }
 };
 
@@ -24,63 +22,61 @@ exports.getAuthors = async (req, res, next) => {
 
     res.status(200).json(authorList);
   } catch (error) {
-    res
-      .status(400)
-      .json({ error: true, message: "Error al traer los autores" });
+    next(new ErrorResponse("Error al obtener los autores", 404));
   }
 };
 
 exports.getAuthorById = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
+    const { id } = req.params;
+
     const author = await Author.findById(id);
+
+    if (!author) {
+      return next(
+        new ErrorResponse("El autor no existe en la bd con este id: " + id, 404)
+      );
+    }
 
     res.status(200).json(author);
   } catch (error) {
-    res
-      .status(400)
-      .json({ error: true, message: "Error al obtener a un autor por id" });
+    next(new ErrorResponse("El autor no existe con este id: " + id, 404));
   }
 };
 
 exports.updateAuthor = async (req, res, next) => {
-  const { id } = req.params;
-  const { body } = req;
-
   try {
+    const { id } = req.params;
+    const { body } = req;
+
     const author = await Author.findByIdAndUpdate(id, body);
 
     if (!author) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Autor no encontrado" });
+      return next(
+        new ErrorResponse("El autor no existe con este id: " + id, 404)
+      );
     }
 
     res.status(200).json({ data: author, msg: "Autor ya actualizado" });
   } catch (error) {
-    res
-      .status(400)
-      .json({ error: true, message: "Error al actualizar al autor" });
+    next(new ErrorResponse("El autor no existe con este id: " + id, 404));
   }
 };
 
 exports.deleteAuthor = async (req, res, next) => {
-  const { id } = req.params;
-
   try {
+    const { id } = req.params;
+
     const author = await Author.findByIdAndDelete(id);
 
     if (!author) {
-      return res
-        .status(400)
-        .json({ error: true, message: "Autor no encontrado" });
+      return next(
+        new ErrorResponse("El autor no existe con este id: " + id, 404)
+      );
     }
 
     res.status(200).json({ msg: "Autor eliminado" });
   } catch (error) {
-    res
-      .status(400)
-      .json({ error: true, message: "Error al eliminar al autor" });
+    next(new ErrorResponse("El autor no existe con este id: " + id, 404));
   }
 };

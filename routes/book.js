@@ -3,14 +3,14 @@ const api = express.Router();
 
 const {
   getBooks,
-  getBook,
   createBook,
+  getBookById,
   updateBook,
   deleteBook,
 } = require("../controllers/book");
 
 api.route("/").get(getBooks).post(createBook);
 
-api.route("/:id").get(getBook).put(updateBook).delete(deleteBook);
+api.route("/:id").get(getBookById).put(updateBook).delete(deleteBook);
 
 module.exports = api;
