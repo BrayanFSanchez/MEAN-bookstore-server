@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const errorHandler = require("./middleware/error");
 const connectDatabase = require("./config/db");
 
@@ -12,6 +13,7 @@ const author = require("./routes/author");
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 

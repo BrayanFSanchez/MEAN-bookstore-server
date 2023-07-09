@@ -80,3 +80,61 @@ exports.deleteBook = async (req, res, next) => {
     next(new ErrorResponse("El libro no existe con este id: " + id, 400));
   }
 };
+
+exports.pagination = async (req, res, next) => {
+  try {
+    const { sort, sortDirection, filterValue, page, pageSize } = req.body;
+
+    const parsedPage = parseInt(page);
+    const parsedPageSize = parseInt(pageSize);
+
+    console.log("page: " + page);
+    console.log("pageSize: " + pageSize);
+
+    let filter = "";
+    let filterProperty = "";
+    let books = [];
+
+    let totalRows = 0;
+
+    if (filterValue) {
+      filter = filterValue.value;
+      filterProperty = filterValue.property;
+
+      books = await Book.find({
+        [filterProperty]: new RegExp(filter, "i"),
+      })
+        .sort({ [sort]: sortDirection })
+        .skip((parsedPage - 1) * parsedPageSize)
+        .limit(parsedPageSize);
+
+      console.log("data: " + books);
+
+      totalRows = await Book.find({
+        [filterProperty]: new RegExp(filter, "i"),
+      }).count();
+    } else {
+      books = await Book.find()
+        .sort({ [sort]: sortDirection })
+        .skip((parsedPage - 1) * parsedPageSize)
+        .limit(parsedPageSize);
+
+      totalRows = await Book.find().count();
+    }
+
+    const pagesQuantity = Math.ceil(totalRows / parsedPageSize);
+
+    res.status(200).json({
+      status: 200,
+      parsedPageSize,
+      parsedPage,
+      sort,
+      sortDirection,
+      pagesQuantity,
+      totalRows,
+      data: books,
+    });
+  } catch (error) {
+    next(new ErrorResponse("Error a la hora de la páginación ", 400));
+  }
+};
