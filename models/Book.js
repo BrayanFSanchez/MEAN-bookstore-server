@@ -13,7 +13,7 @@ const BookSchema = new moongoose.Schema({
   description: String,
   price: Number,
   publicationDate: Date,
-  author: { id: String, fullname: String },
+  author: { id: String, fullName: String },
 });
 
 module.exports = mongoose.model("Book", BookSchema);
