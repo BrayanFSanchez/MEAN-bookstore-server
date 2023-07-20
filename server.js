@@ -10,6 +10,7 @@ connectDatabase();
 
 const book = require("./routes/book");
 const author = require("./routes/author");
+const user = require("./routes/user.js");
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 app.use("/api/Book", book);
 app.use("/api/BookstoreAuthor", author);
+app.use("/user", user);
 
 app.use(errorHandler);
 

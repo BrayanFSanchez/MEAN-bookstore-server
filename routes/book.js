@@ -1,6 +1,6 @@
 const express = require("express");
 const api = express.Router();
-
+const { security } = require("../middleware/security");
 const {
   getBooks,
   createBook,
@@ -10,10 +10,14 @@ const {
   pagination,
 } = require("../controllers/book");
 
-api.route("/").get(getBooks).post(createBook);
+api.route("/").get(security, getBooks).post(security, createBook);
 
-api.route("/:id").get(getBookById).put(updateBook).delete(deleteBook);
+api
+  .route("/:id")
+  .get(security, getBookById)
+  .put(security, updateBook)
+  .delete(security, deleteBook);
 
-api.route("/pagination").post(pagination);
+api.route("/pagination").post(security, pagination);
 
 module.exports = api;
