@@ -6,7 +6,7 @@ This server was developed using Node.js and Express as the backend for a MEAN pr
 
 ## Installation
 
-1. Clone the repository: [https://github.com/BrayanFSanchez/MERN-web-personal-server.git](https://github.com/BrayanFSanchez/MEAN-bookstore-server.git)
+1. Clone the repository: https://github.com/BrayanFSanchez/MEAN-bookstore-server.git
 2. Navigate to the server directory: cd server
 3. Install the dependencies using Yarn: yarn install or npm install
 
